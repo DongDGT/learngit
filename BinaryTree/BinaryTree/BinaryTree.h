@@ -3,18 +3,17 @@
 #include<queue>
 template<typename T>
 class BinaryTree {
-private:
-	typedef struct BiTNode {
+protected:
+	struct BiTNode {
 		T data;
 		BiTNode *leftson;
 		BiTNode *rightson;
-	}BiTNode;
+	};
 	BiTNode *root;
-	
 public:
 	BinaryTree();
 	~BinaryTree();
-	bool CreateBiTree(T data, std::string definition);
+	bool DestroyBiTree();
 	bool PreOrderTraverse(bool(*visit)(T &e));
 	bool PreOrderTraverse_recursion(bool(*visit)(T &e), BiTNode *T);
 	bool InOrderTraverse(bool(*visit)(T &e));
@@ -22,7 +21,7 @@ public:
 	bool PostOrderTraverse(bool(*visit)(T &e));
 	bool PostOrderTraverse_recursion(bool(*visit)(T &e), BiTNode *T);
 	bool LevelOrderTraverse(bool(*visit)(T &e));
-	int Value();
+	
 };
 
 
@@ -48,7 +47,7 @@ BinaryTree<T>::~BinaryTree()
 		father.push(p1);
 		p1 = p1->leftson;
 	}
-	while (!father.empty() && mode) {
+	while (!father.empty()) {
 		p1 = father.top();
 		if (p1->rightson != nullptr) {
 			father.push(p1->rightson);
@@ -74,11 +73,8 @@ BinaryTree<T>::~BinaryTree()
 	root = nullptr;
 }
 
-/*
-*按definiton生成二叉树
-*/
 template<typename T>
-bool BinaryTree<T>::CreateBiTree(T data, std::string definition)
+bool BinaryTree<T>::DestroyBiTree()
 {
 	std::stack<BiTNode*> father;
 	BiTNode *p1;
@@ -87,7 +83,7 @@ bool BinaryTree<T>::CreateBiTree(T data, std::string definition)
 		father.push(p1);
 		p1 = p1->leftson;
 	}
-	while (!father.empty() && mode) {
+	while (!father.empty()) {
 		p1 = father.top();
 		if (p1->rightson != nullptr) {
 			father.push(p1->rightson);
@@ -111,12 +107,8 @@ bool BinaryTree<T>::CreateBiTree(T data, std::string definition)
 		}
 	}
 	root = nullptr;
-	std::stack<char> stack_operator;
-	std::stack<int> number;
-	std::stack<char> numb;
-	std::string polish notation;
-
 }
+
 
 /*
 *先序遍历，使用函数（非递归）
@@ -128,6 +120,10 @@ bool BinaryTree<T>::PreOrderTraverse(bool(*visit)(T &e))
 	BiTNode *p1;
 	bool mode = true;
 	p1 = root;
+	while (p1 != nullptr) {
+		father.push(p1);
+		p1 = p1->leftson;
+	}
 	while (!father.empty()&&mode) {
 		p1 = father.front();
 		while (p1 != nullptr) {
@@ -208,7 +204,7 @@ bool BinaryTree<T>::InOrderTraverse(bool(*visit)(T &e))
 *中序遍历，使用函数（递归）
 */
 template<typename T>
-bool BinaryTree<T>::InOrderTraverse_recursion(bool(*visit)(T &e), BiTNode *T)
+bool BinaryTree<T>::InOrderTraverse_recursion(bool(*visit)(T &e), BiTNode *t)
 {
 	static bool mode = true;
 	if (mode) {
@@ -265,7 +261,7 @@ bool BinaryTree<T>::PostOrderTraverse(bool(*visit)(T &e))
 *后序遍历，使用函数（递归）
 */
 template<typename T>
-inline bool BinaryTree<T>::PostOrderTraverse_recursion(bool(*visit)(T &e), BiTNode *T)
+inline bool BinaryTree<T>::PostOrderTraverse_recursion(bool(*visit)(T &e), BiTNode *t)
 {
 	static bool mode = true;
 	if (mode) {
@@ -309,9 +305,5 @@ bool BinaryTree<T>::LevelOrderTraverse(bool(*visit)(T &e))
 	return true;
 }
 
-template<typename T>
-int BinaryTree<T>::Value()
-{
-	return 0;
-}
+
 
